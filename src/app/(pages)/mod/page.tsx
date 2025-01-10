@@ -51,8 +51,6 @@ const Mod = () => {
       });
       return;
     }
-    console.log("dividendo", numberDividendo);
-    console.log("divisor", numberDivisor);
     const res = mod(numberDividendo, numberDivisor);
     const finalTime = performance.now();
     setExecTime(finalTime - initalTime);

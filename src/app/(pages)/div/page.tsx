@@ -13,8 +13,8 @@ interface Error {
 }
 
 const Div = () => {
-  const [dividendo, setDividendo] = useState<number>(0);
-  const [divisor, setDivisor] = useState<number>(0);
+  const [dividendo, setDividendo] = useState<string>("0");
+  const [divisor, setDivisor] = useState<string>("0");
   const [result, setResult] = useState<number>(0);
   const [execTime, setExecTime] = useState<number>(0);
   const [error, setError] = useState<Error>({
@@ -26,45 +26,54 @@ const Div = () => {
   const handleResult = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const initalTime = performance.now();
+    const numberDivisor=Number(divisor);
+    const numberDividendo=Number(dividendo);
     setError({} as Error);
-    if (divisor === 0) {
+    if (numberDivisor=== 0) {
       setError({
         ...error,
         divisor: { message: "O divisor não pode ser 0" },
       });
       return;
     }
-    if (isNaN(dividendo) || parseInt(dividendo.toString()) !== dividendo) {
+    if (isNaN(numberDividendo) || !Number.isInteger(numberDividendo)) {
       setError({
         ...error,
         dividendo: { message: "O dividendo deve ser um número" },
       });
       return;
     }
-    if (isNaN(divisor) || parseInt(divisor.toString()) !== divisor) {
+    if (isNaN(numberDivisor) || !Number.isInteger(numberDivisor)) {
       setError({
         ...error,
         divisor: { message: "O divisor deve ser um número inteiro" },
       });
       return;
     }
-    const res = div(dividendo, divisor);
+    const res = div(numberDividendo, numberDivisor);
     const finalTime = performance.now();
     setExecTime(finalTime - initalTime);
     setResult(res);
   };
 
   const handleDividendo = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const number = Number(e.target.value);
-    if (isNaN(number)) return;
-    if (number > 9999999999) return;
-    setDividendo(number);
+    let inputValue = e.target.value.replace(/[,\.]/g, "");
+    inputValue = inputValue.replace(/[^-\d.]/g, "");
+    if (inputValue.includes("-") && inputValue.indexOf("-") > 0) {
+        inputValue = inputValue.replace(/-/g, ""); 
+    }
+    if (Math.abs(Number(inputValue)) > 9999999999) return;
+    setDividendo(inputValue);
   };
 
   const handleDivisor = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const number = Number(e.target.value);
-    if (isNaN(number)) return;
-    setDivisor(number);
+    let inputValue = e.target.value.replace(/[,\.]/g, "");
+    inputValue = inputValue.replace(/[^-\d.]/g, "");
+    if (inputValue.includes("-") && inputValue.indexOf("-") > 0) {
+        inputValue = inputValue.replace(/-/g, ""); 
+    }
+    if (Math.abs(Number(inputValue)) > 9999999999) return;
+    setDivisor(inputValue);
   };
 
   return (
