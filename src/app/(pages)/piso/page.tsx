@@ -19,6 +19,7 @@ const Piso = () => {
     let res = 0;
     const numeroTratado = parseFloat(number);
     const restoPorUm = numeroTratado % 1;
+    if(restoPorUm == 0) return numeroTratado;
     if (numeroTratado >= 0) {
       res = numeroTratado - restoPorUm;
     } else {
